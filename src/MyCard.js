@@ -4,7 +4,7 @@ import "./CardStyle.css";
 import { FaCode } from "react-icons/fa";
 import ReactCardFlip from "react-card-flip";
 
-export default function MyCard() {
+export default function MyCard(props) {
   const [flipped, setFlipped] = useState(false);
 
   const handleClick = () => {
@@ -14,7 +14,7 @@ export default function MyCard() {
   return (
     <ReactCardFlip isFlipped={flipped} flipDirection="horizontal">
       <Card
-        style={{ backgroundColor: "#8B78E6", height: "25vh" }} 
+        style={{ backgroundColor: "#8B78E6", height: "25vh" }}
         className="text-center"
         onClick={() => {
           handleClick();
@@ -24,14 +24,18 @@ export default function MyCard() {
       </Card>
 
       <Card
-        style={{ backgroundColor: "#d63031", height: "25vh" }} 
+        style={{ backgroundColor: "#d63031", height: "25vh" }}
         className="text-center"
         onClick={() => {
           handleClick();
         }}
       >
         <p className="m-4 pt-4">
-          <FaCode size="4rem" color="#FFF" />
+          {props.iconName ? (
+            <props.iconName size="4rem" color="#FFF" />
+          ) : (
+            <FaCode size="4rem" color="#FFF" />
+          )}
         </p>
       </Card>
     </ReactCardFlip>
