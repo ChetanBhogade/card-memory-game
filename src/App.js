@@ -37,19 +37,20 @@ function App() {
     return myArray;
   };
 
-  const iconSet = [getRandomIconArray(iconArray), getRandomIconArray(iconArray)];
+  const iconSet = getRandomIconArray([
+    ...getRandomIconArray(iconArray),
+    ...getRandomIconArray(iconArray),
+  ]);
 
   return (
     <div className="container-fluid">
       <div className="row">
-        {iconSet.map((setIcon) => {
-          return setIcon.map((item, index) => {
-            return (
-              <div key={index} className="col-3 p-0">
-                <MyCard iconName={item} />
-              </div>
-            );
-          });
+        {iconSet.map((item, index) => {
+          return (
+            <div key={index} className="col-3 p-0">
+              <MyCard iconName={item} />
+            </div>
+          );
         })}
       </div>
     </div>
