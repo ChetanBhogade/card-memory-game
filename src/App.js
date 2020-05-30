@@ -46,6 +46,8 @@ function App() {
   // setting up useState hooks
   const [icons, setIcons] = useState([]);
   const [isFlipped, setIsFlipped] = useState(new Array(16).fill(false));
+  const [count, setCount] = useState(1);
+  const [prevCardId, setPrevCardId] = useState(-1);
 
   // using useEffect hooks
   useEffect(() => {
@@ -60,9 +62,30 @@ function App() {
     const cardId = event.target.id;
 
     if (oldFlippedValues[cardId] === false) {
+      if (prevCardId === -1) {
+        setPrevCardId(cardId);
+      }
       oldFlippedValues[cardId] = !oldFlippedValues[cardId];
       setIsFlipped(oldFlippedValues);
+      setCount(count + 1);
     }
+
+    if (count === 2) {
+      let intervalNo = setInterval(() => {
+        findMatchCard(oldFlippedValues, cardId, intervalNo);
+      }, 1000);
+    }
+    console.log(`Count value: ${count}`);
+  };
+
+  const findMatchCard = (curFlippedValues, curCardId, intervalNo) => {
+    const currentFlippedValues = [...curFlippedValues];
+    currentFlippedValues[curCardId] = !currentFlippedValues[curCardId];
+    currentFlippedValues[prevCardId] = !currentFlippedValues[prevCardId];
+    setIsFlipped(currentFlippedValues);
+    setPrevCardId(-1);
+    setCount(1);
+    clearInterval(intervalNo);
   };
 
   // returning the jsx for game
