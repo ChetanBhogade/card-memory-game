@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-import { FaCode } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 import ReactCardFlip from "react-card-flip";
 
 export default function MyCard(props) {
@@ -31,7 +31,7 @@ export default function MyCard(props) {
           {props.iconName !== -1 ? (
             <props.iconName size="4rem" color="#FFF" />
           ) : (
-            <FaCode size="4rem" color="#FFF" />
+            <FaCheck size="4rem" color="#2ecc72" />
           )}
         </p>
       </Card>

@@ -48,14 +48,25 @@ function App() {
   const [isFlipped, setIsFlipped] = useState(new Array(16).fill(false));
   const [count, setCount] = useState(1);
   const [prevCardId, setPrevCardId] = useState(-1);
+  const [correctMatches, setCorrectMatches] = useState(0);
+  const [isOver, setIsOver] = useState(false);
 
   // using useEffect hooks
   useEffect(() => {
     if (icons.length < 16) {
       setIcons(iconSet);
-      console.log("effect is called");
     }
-  }, [setIcons, iconSet, icons]);
+
+    if (!isOver) {
+      if (correctMatches === 8) {
+        console.log("Found 8 Card Sets");
+        setIsOver(true)
+      }
+    } else {
+      console.log("game is over");
+      
+    }
+  }, [setIcons, iconSet, icons, isOver, correctMatches]);
 
   // handling the on click event for card
   const handleClick = (event) => {
@@ -76,8 +87,9 @@ function App() {
         findMatchCard(oldFlippedValues, cardId, intervalNo);
       }, 1000);
     }
-    console.log(`Count value: ${count}`);
+
   };
+
 
   const findMatchCard = (curFlippedValues, curCardId, intervalNo) => {
     const currentIconSet = [...icons];
@@ -85,25 +97,25 @@ function App() {
 
     const prevCard = currentIconSet[prevCardId];
     const curCard = currentIconSet[curCardId];
-    console.log(prevCard === curCard);
 
     if (prevCard === curCard) {
-      // disabling the card 
+      // disabling the card
       currentIconSet[prevCardId] = -1;
       currentIconSet[curCardId] = -1;
 
       currentFlippedValues[curCardId] = -1;
       currentFlippedValues[prevCardId] = -1;
 
+      setIcons(currentIconSet);
       setIsFlipped(currentFlippedValues);
       setPrevCardId(-1);
-      setIcons(currentIconSet);
       setCount(1);
+      setCorrectMatches(correctMatches + 1);
     } else {
       // reflip the cards
       currentFlippedValues[curCardId] = !currentFlippedValues[curCardId];
       currentFlippedValues[prevCardId] = !currentFlippedValues[prevCardId];
-      
+
       setIsFlipped(currentFlippedValues);
       setPrevCardId(-1);
       setCount(1);
