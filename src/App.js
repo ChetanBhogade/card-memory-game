@@ -53,6 +53,7 @@ function App() {
   useEffect(() => {
     if (icons.length < 16) {
       setIcons(iconSet);
+      console.log("effect is called");
     }
   }, [setIcons, iconSet, icons]);
 
@@ -79,12 +80,35 @@ function App() {
   };
 
   const findMatchCard = (curFlippedValues, curCardId, intervalNo) => {
+    const currentIconSet = [...icons];
     const currentFlippedValues = [...curFlippedValues];
-    currentFlippedValues[curCardId] = !currentFlippedValues[curCardId];
-    currentFlippedValues[prevCardId] = !currentFlippedValues[prevCardId];
-    setIsFlipped(currentFlippedValues);
-    setPrevCardId(-1);
-    setCount(1);
+
+    const prevCard = currentIconSet[prevCardId];
+    const curCard = currentIconSet[curCardId];
+    console.log(prevCard === curCard);
+
+    if (prevCard === curCard) {
+      // disabling the card 
+      currentIconSet[prevCardId] = -1;
+      currentIconSet[curCardId] = -1;
+
+      currentFlippedValues[curCardId] = -1;
+      currentFlippedValues[prevCardId] = -1;
+
+      setIsFlipped(currentFlippedValues);
+      setPrevCardId(-1);
+      setIcons(currentIconSet);
+      setCount(1);
+    } else {
+      // reflip the cards
+      currentFlippedValues[curCardId] = !currentFlippedValues[curCardId];
+      currentFlippedValues[prevCardId] = !currentFlippedValues[prevCardId];
+      
+      setIsFlipped(currentFlippedValues);
+      setPrevCardId(-1);
+      setCount(1);
+    }
+
     clearInterval(intervalNo);
   };
 
@@ -96,7 +120,6 @@ function App() {
           return (
             <div
               key={index}
-              id={index}
               onClick={(event) => {
                 handleClick(event);
               }}
