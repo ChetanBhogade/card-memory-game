@@ -13,7 +13,6 @@ import {
   GiSpiderAlt,
 } from "react-icons/gi";
 import MyModal from "./MyModal";
-import { Button } from "react-bootstrap";
 
 function App() {
   // setting up icons
@@ -52,11 +51,13 @@ function App() {
   const [prevCardId, setPrevCardId] = useState(-1);
   const [correctMatches, setCorrectMatches] = useState(0);
   const [isOver, setIsOver] = useState(false);
+  const [modalShow, setModalShow] = React.useState(false);
 
   // using useEffect hooks
   useEffect(() => {
     if (icons.length < 16) {
       setIcons(iconSet);
+      setModalShow(true);
     }
 
     if (!isOver) {
@@ -123,14 +124,10 @@ function App() {
     clearInterval(intervalNo);
   };
 
-  const [modalShow, setModalShow] = React.useState(false);
 
   // returning the jsx for game
   return (
     <div className="container-fluid">
-      <Button variant="primary" onClick={() => setModalShow(true)}>
-        Launch vertically centered modal
-      </Button>
       <MyModal show={modalShow} onHide={() => setModalShow(false)} />
       <div className="row">
         {icons.map((item, index) => {

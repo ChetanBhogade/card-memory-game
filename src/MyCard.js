@@ -12,7 +12,7 @@ export default function MyCard(props) {
     >
       {/* front card  */}
       {props.iconName === -1 ? (
-        <Card style={{ backgroundColor: "#FFF", height: "25vh" }} />
+        <Card style={{ backgroundColor: "#FFF", height: "25vh", border: "none" }} />
       ) : (
         <Card
           style={{ backgroundColor: "#8B78E6", height: "25vh" }}
