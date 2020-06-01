@@ -12,10 +12,10 @@ export default function MyCard(props) {
     >
       {/* front card  */}
       {props.iconName === -1 ? (
-        <Card style={{ backgroundColor: "#FFF", height: "25vh", border: "none" }} />
+        <Card style={{ backgroundColor: "#FFF", height: "24.68vh", border: "none" }} />
       ) : (
         <Card
-          style={{ backgroundColor: "#8B78E6", height: "25vh" }}
+          style={{ backgroundColor: "#8B78E6", height: "24.68vh" }}
           className="text-center"
           id={props.myKey}
         ></Card>
@@ -23,7 +23,7 @@ export default function MyCard(props) {
 
       {/* back Card  */}
       <Card
-        style={{ backgroundColor: "#d63031", height: "25vh" }}
+        style={{ backgroundColor: "#d63031", height: "24.68vh" }}
         className="text-center"
         id={props.myKey}
       >

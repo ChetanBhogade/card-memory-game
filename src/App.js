@@ -44,6 +44,17 @@ function App() {
     ...getRandomIconArray(iconArray),
   ]);
 
+  const timeToPercentage = (currentMilliSeconds, maxSeconds, intervalNo) => {
+    const currentSeconds = currentMilliSeconds / 1000;
+    const percentage = (currentSeconds / maxSeconds) * 100;
+    if (percentage < 100) {
+      return percentage;
+    } else {
+      clearInterval(intervalNo);
+      return null;
+    }
+  };
+
   // setting up useState hooks
   const [icons, setIcons] = useState([]);
   const [isFlipped, setIsFlipped] = useState(new Array(16).fill(false));
@@ -51,13 +62,15 @@ function App() {
   const [prevCardId, setPrevCardId] = useState(-1);
   const [correctMatches, setCorrectMatches] = useState(0);
   const [isOver, setIsOver] = useState(false);
-  const [modalShow, setModalShow] = React.useState(false);
+  const [instructionsModal, setinstructionsModal] = React.useState(false);
+  const [timerValue, setTimerValue] = useState(0);
+  const [gameOverModal, setGameOverModal] = useState(false);
 
   // using useEffect hooks
   useEffect(() => {
     if (icons.length < 16) {
       setIcons(iconSet);
-      setModalShow(true);
+      setinstructionsModal(true);
     }
 
     if (!isOver) {
@@ -66,6 +79,8 @@ function App() {
         setIsOver(true);
       }
     } else {
+      console.log(`You fund: ${correctMatches} cards from effect`);
+      setGameOverModal(true);
       console.log("game is over");
     }
   }, [setIcons, iconSet, icons, isOver, correctMatches]);
@@ -124,29 +139,87 @@ function App() {
     clearInterval(intervalNo);
   };
 
+  const calculateTimer = () => {
+    setinstructionsModal(false);
+    var currentSeconds = 1;
+    const intervalNo = setInterval(() => {
+      // console.log(timeToPercentage(currentSeconds, 32, intervalNo));
+      const value = timeToPercentage(currentSeconds, 15, intervalNo);
+      if (value !== null) {
+        setTimerValue(value);
+      } else {
+        setIsOver(true);
+      }
+      currentSeconds += 100;
+    }, 100);
+  };
 
   // returning the jsx for game
   return (
-    <div className="container-fluid">
-      <MyModal show={modalShow} onHide={() => setModalShow(false)} />
-      <div className="row">
-        {icons.map((item, index) => {
-          return (
-            <div
-              key={index}
-              onClick={(event) => {
-                handleClick(event);
-              }}
-              className="col-3 p-0"
-            >
-              <MyCard
-                myKey={index}
-                flipped={isFlipped[index]}
-                iconName={item}
-              />
-            </div>
-          );
-        })}
+    <div>
+      <div className="progressMainWrapper">
+        <div
+          className="progressMainStyle"
+          style={{ width: `${timerValue}%` }}
+        ></div>
+      </div>
+      <div className="container-fluid">
+        <MyModal
+          show={instructionsModal}
+          onHide={() => {
+            calculateTimer();
+          }}
+        >
+          <h5>Instructions: </h5>
+          <ol>
+            <li>
+              You can see a grid with 4 x 4 cards. All the cards are faced down
+              initially.
+            </li>
+            <li>
+              You can click on Start button to start the game. When this button
+              is clicked, a timer will start.
+            </li>
+            <li>
+              You can click on any card to unveil the image that is underneath
+              it.
+            </li>
+            <li>The image will be displayed until you clicks on a 2nd card.</li>
+            <li>When you clicks on 2nd card: </li>
+            <li>
+              If there is a match, the 2 cards will be eliminated from the game.
+            </li>
+            <li>
+              If there isn't a match, the 2 cards will flip back to their
+              original state.
+            </li>
+            <li>Find the two cards which has the same image. </li>
+            <li>You have total 8 sets of images (means: total 16 cards)</li>
+          </ol>
+        </MyModal>
+        <div className="row">
+          {icons.map((item, index) => {
+            return (
+              <div
+                key={index}
+                onClick={(event) => {
+                  handleClick(event);
+                }}
+                className="col-3 p-0"
+              >
+                <MyCard
+                  myKey={index}
+                  flipped={isFlipped[index]}
+                  iconName={item}
+                />
+              </div>
+            );
+          })}
+        </div>
+        <MyModal show={gameOverModal}>
+          <h3>Fail</h3>
+          <h5>Images Found: {correctMatches}</h5>
+        </MyModal>
       </div>
     </div>
   );
