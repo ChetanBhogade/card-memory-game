@@ -12,6 +12,8 @@ import {
   GiInfinity,
   GiSpiderAlt,
 } from "react-icons/gi";
+import MyModal from "./MyModal";
+import { Button } from "react-bootstrap";
 
 function App() {
   // setting up icons
@@ -60,11 +62,10 @@ function App() {
     if (!isOver) {
       if (correctMatches === 8) {
         console.log("Found 8 Card Sets");
-        setIsOver(true)
+        setIsOver(true);
       }
     } else {
       console.log("game is over");
-      
     }
   }, [setIcons, iconSet, icons, isOver, correctMatches]);
 
@@ -87,9 +88,7 @@ function App() {
         findMatchCard(oldFlippedValues, cardId, intervalNo);
       }, 1000);
     }
-
   };
-
 
   const findMatchCard = (curFlippedValues, curCardId, intervalNo) => {
     const currentIconSet = [...icons];
@@ -124,9 +123,15 @@ function App() {
     clearInterval(intervalNo);
   };
 
+  const [modalShow, setModalShow] = React.useState(false);
+
   // returning the jsx for game
   return (
     <div className="container-fluid">
+      <Button variant="primary" onClick={() => setModalShow(true)}>
+        Launch vertically centered modal
+      </Button>
+      <MyModal show={modalShow} onHide={() => setModalShow(false)} />
       <div className="row">
         {icons.map((item, index) => {
           return (
