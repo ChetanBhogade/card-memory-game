@@ -44,13 +44,13 @@ function App() {
     ...getRandomIconArray(iconArray),
   ]);
 
-  const timeToPercentage = (currentMilliSeconds, maxSeconds, intervalNo) => {
+  const timeToPercentage = (currentMilliSeconds, maxSeconds) => {
     const currentSeconds = currentMilliSeconds / 1000;
     const percentage = (currentSeconds / maxSeconds) * 100;
     if (percentage < 100) {
       return percentage;
     } else {
-      clearInterval(intervalNo);
+      clearInterval(intervalNumber);
       return null;
     }
   };
@@ -65,6 +65,7 @@ function App() {
   const [instructionsModal, setinstructionsModal] = React.useState(false);
   const [timerValue, setTimerValue] = useState(0);
   const [gameOverModal, setGameOverModal] = useState(false);
+  const [intervalNumber, setIntervalNumber] = useState(0);
 
   // using useEffect hooks
   useEffect(() => {
@@ -75,15 +76,13 @@ function App() {
 
     if (!isOver) {
       if (correctMatches === 8) {
-        console.log("Found 8 Card Sets");
         setIsOver(true);
       }
     } else {
-      console.log(`You fund: ${correctMatches} cards from effect`);
       setGameOverModal(true);
-      console.log("game is over");
+      clearInterval(intervalNumber);
     }
-  }, [setIcons, iconSet, icons, isOver, correctMatches]);
+  }, [setIcons, iconSet, icons, isOver, correctMatches, intervalNumber]);
 
   // handling the on click event for card
   const handleClick = (event) => {
@@ -141,16 +140,40 @@ function App() {
 
   const calculateTimer = () => {
     setinstructionsModal(false);
-    var currentSeconds = 1;
+    var currentMilliSeconds = 1;
     const intervalNo = setInterval(() => {
-      // console.log(timeToPercentage(currentSeconds, 32, intervalNo));
-      const value = timeToPercentage(currentSeconds, 15, intervalNo);
+      const value = timeToPercentage(currentMilliSeconds, 39);
+      setIntervalNumber(intervalNo);
       if (value !== null) {
         setTimerValue(value);
       } else {
         setIsOver(true);
       }
-      currentSeconds += 100;
+      currentMilliSeconds += 100;
+    }, 100);
+  };
+
+  const restartGame = () => {
+    setIcons(iconSet);
+    setIsFlipped(new Array(16).fill(false));
+    setCount(1);
+    setPrevCardId(-1);
+    setCorrectMatches(0);
+    setIsOver(false);
+    setinstructionsModal(false);
+    setTimerValue(0);
+    setGameOverModal(false);
+
+    var currentMilliSeconds = 1;
+    const intervalNo = setInterval(() => {
+      const value = timeToPercentage(currentMilliSeconds, 39);
+      setIntervalNumber(intervalNo);
+      if (value !== null) {
+        setTimerValue(value);
+      } else {
+        setIsOver(true);
+      }
+      currentMilliSeconds += 100;
     }, 100);
   };
 
@@ -166,36 +189,25 @@ function App() {
       <div className="container-fluid">
         <MyModal
           show={instructionsModal}
+          btn="Start"
           onHide={() => {
             calculateTimer();
           }}
         >
           <h5>Instructions: </h5>
-          <ol>
+          <ul>
+            <li>It is a timed card memory game.</li>
             <li>
-              You can see a grid with 4 x 4 cards. All the cards are faced down
-              initially.
+              Click the cards to see what symbol they uncover and try to find
+              the matching symbol underneath the other cards.
             </li>
             <li>
-              You can click on Start button to start the game. When this button
-              is clicked, a timer will start.
+              Uncover two matching symbols at once to eliminate them from the
+              game.
             </li>
-            <li>
-              You can click on any card to unveil the image that is underneath
-              it.
-            </li>
-            <li>The image will be displayed until you clicks on a 2nd card.</li>
-            <li>When you clicks on 2nd card: </li>
-            <li>
-              If there is a match, the 2 cards will be eliminated from the game.
-            </li>
-            <li>
-              If there isn't a match, the 2 cards will flip back to their
-              original state.
-            </li>
-            <li>Find the two cards which has the same image. </li>
-            <li>You have total 8 sets of images (means: total 16 cards)</li>
-          </ol>
+            <li>Eliminate all cards as fast as you can to win the game.</li>
+            <li>Have a Fun :)</li>
+          </ul>
         </MyModal>
         <div className="row">
           {icons.map((item, index) => {
@@ -216,9 +228,33 @@ function App() {
             );
           })}
         </div>
-        <MyModal show={gameOverModal}>
-          <h3>Fail</h3>
-          <h5>Images Found: {correctMatches}</h5>
+        <MyModal
+          show={gameOverModal}
+          onHide={() => {
+            restartGame();
+          }}
+          btn="Restart"
+        >
+          {correctMatches === 8 ? (
+            // Game Win Status
+            <div className="text-center">
+              <h4 className="display-4" style={{ color: "green" }}>
+                You Won The Game
+              </h4>
+            </div>
+          ) : (
+            // Game Lose Status
+            <div className="text-center">
+              <h4 className="display-4" style={{ color: "red" }}>
+                Failed
+              </h4>
+              <h6>Try Again Next Time</h6>
+            </div>
+          )}
+          <br />
+          <div className="container">
+            <h6>Symbols Found: {correctMatches} / 8</h6>
+          </div>
         </MyModal>
       </div>
     </div>

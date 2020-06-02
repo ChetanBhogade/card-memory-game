@@ -18,7 +18,7 @@ export default function MyModal(props) {
       <Modal.Body>{props.children}</Modal.Body>
       <Modal.Footer>
         <Button className="btn-success btn-lg" onClick={props.onHide}>
-          Start
+          {props.btn}
         </Button>
       </Modal.Footer>
     </Modal>
