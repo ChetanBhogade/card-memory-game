@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from "react";
 import MyCard from "./MyCard";
+import MyModal from "./MyModal";
+import {
+  IoIosAirplane,
+  IoIosAlarm,
+  IoIosContact,
+  IoIosHourglass,
+  IoIosSave,
+  IoLogoGameControllerB,
+  IoIosSettings,
+  IoMdHeadset,
+} from "react-icons/io";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import {
-  GiFlame,
-  GiEternalLove,
-  GiBasketballBall,
-  GiDove,
-  GiBookCover,
-  GiAbstract080,
-  GiInfinity,
-  GiSpiderAlt,
-} from "react-icons/gi";
-import MyModal from "./MyModal";
 
 function App() {
   // setting up icons
   const iconArray = [
-    GiFlame,
-    GiBasketballBall,
-    GiBookCover,
-    GiDove,
-    GiEternalLove,
-    GiAbstract080,
-    GiInfinity,
-    GiSpiderAlt,
+    IoIosAirplane,
+    IoIosAlarm,
+    IoIosContact,
+    IoIosHourglass,
+    IoIosSave,
+    IoIosSettings,
+    IoLogoGameControllerB,
+    IoMdHeadset,
   ];
 
   const getRandomIconArray = (arr) => {
@@ -142,7 +142,7 @@ function App() {
     setinstructionsModal(false);
     var currentMilliSeconds = 1;
     const intervalNo = setInterval(() => {
-      const value = timeToPercentage(currentMilliSeconds, 39);
+      const value = timeToPercentage(currentMilliSeconds, 40);
       setIntervalNumber(intervalNo);
       if (value !== null) {
         setTimerValue(value);
@@ -166,7 +166,7 @@ function App() {
 
     var currentMilliSeconds = 1;
     const intervalNo = setInterval(() => {
-      const value = timeToPercentage(currentMilliSeconds, 39);
+      const value = timeToPercentage(currentMilliSeconds, 40);
       setIntervalNumber(intervalNo);
       if (value !== null) {
         setTimerValue(value);
