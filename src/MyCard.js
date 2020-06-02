@@ -27,7 +27,7 @@ export default function MyCard(props) {
         className="text-center"
         id={props.myKey}
       >
-        <p className="m-4 pt-4" id={props.myKey}>
+        <p className="m-2 pt-4" id={props.myKey}>
           {props.iconName !== -1 ? (
             <props.iconName size="4rem" color="#FFF" />
           ) : (
